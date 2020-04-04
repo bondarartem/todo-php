@@ -1,5 +1,7 @@
 <?php
 require_once('template/header.php');
+require_once('controllers/TodoController.php');
+
 ?>
 			<header class="header">
 				<h1>todos</h1>
@@ -10,24 +12,20 @@ require_once('template/header.php');
 				<input id="toggle-all" class="toggle-all" type="checkbox">
 				<label for="toggle-all">Mark all as complete</label>
 				<ul class="todo-list">
-					<!-- These are here just to show the structure of the list items -->
-					<!-- List items should get the class `editing` when editing and `completed` when marked as completed -->
-					<li class="completed">
-						<div class="view">
-							<input class="toggle" type="checkbox" checked>
-							<label>Taste JavaScript</label>
-							<button class="destroy"></button>
-						</div>
-						<input class="edit" value="Create a TodoMVC template">
-					</li>
-					<li>
-						<div class="view">
-							<input class="toggle" type="checkbox">
-							<label>Buy a unicorn</label>
-							<button class="destroy"></button>
-						</div>
-						<input class="edit" value="Rule the web">
-					</li>
+                    <?php
+                    foreach ($arResults as $todoItem) {
+                        if ($todoItem[3] == 1) {?>
+
+                        <li <?=$todoItem[2]==1 ? "class='completed'": ""?>>
+                            <div class="view">
+                                <input class="toggle" type="checkbox" <?=$todoItem[2]==1 ? "checked": ""?>>
+                                <label><?=$todoItem[1]?></label>
+                                <button class="destroy"></button>
+                            </div>
+                            <input class="edit" value="<?=$todoItem[1]?>">
+                        </li>
+                    <?php }
+                    }?>
 				</ul>
 			</section>
 			<!-- This footer should hidden by default and shown when there are todos -->

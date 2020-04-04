@@ -4,13 +4,16 @@
 class CDB
 {
     private $db;
+    private $db_host = '127.0.0.1';
     private $db_name = 'todo';
-    private $db_user = 'root';
-    private $db_password = 'root';
+    private $db_user = 'todo';
+    private $db_password = 'todo';
 
     // Инициализируем подключение к бд
     function __construct(){
-        $this->db = new mysqli('localhost', $this->db_user, $this->db_password, $this->db_name);
+        $this->db = new mysqli($this->db_host, $this->db_user, $this->db_password, $this->db_name);
+
+        mysqli_query($this->db,'SET NAMES utf8');
     }
 
     // simple select with fetch

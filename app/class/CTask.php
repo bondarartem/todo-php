@@ -1,12 +1,9 @@
 <?php
 
-require_once("./CDB.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/app/class/CDB.php");
 
 class CTask
 {
-    public function __construct(){
-
-    }
 
     public function getTasks($author_id = 1) {
         $db = new CDB();
