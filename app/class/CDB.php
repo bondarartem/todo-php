@@ -51,8 +51,9 @@ class CDB
 
         $result = $this->db->query($sql) or die("error");
 
-        if ($result) {
+        if ($result)
             return true;
-        }
+        else
+            return false;
     }
 }

@@ -12,20 +12,7 @@ require_once('controllers/TodoController.php');
 				<input id="toggle-all" class="toggle-all" type="checkbox">
 				<label for="toggle-all">Mark all as complete</label>
 				<ul class="todo-list">
-                    <?php
-                    foreach ($arResults as $todoItem) {
-                        if ($todoItem[3] == 1) {?>
 
-                        <li <?=$todoItem[2]==1 ? "class='completed'": ""?>>
-                            <div class="view">
-                                <input class="toggle" type="checkbox" <?=$todoItem[2]==1 ? "checked": ""?>>
-                                <label><?=$todoItem[1]?></label>
-                                <button class="destroy"></button>
-                            </div>
-                            <input class="edit" value="<?=$todoItem[1]?>">
-                        </li>
-                    <?php }
-                    }?>
 				</ul>
 			</section>
 			<!-- This footer should hidden by default and shown when there are todos -->
@@ -35,19 +22,19 @@ require_once('controllers/TodoController.php');
 				<!-- Remove this if you don't implement routing -->
 				<ul class="filters">
 					<li>
-						<a class="selected" href="#/">All</a>
+						<a id="all" class="selected" href="#/">All</a>
 					</li>
 					<li>
-						<a href="#/active">Active</a>
+						<a id="active" href="#/active">Active</a>
 					</li>
 					<li>
-						<a href="#/completed">Completed</a>
+						<a id="completed" href="#/completed">Completed</a>
 					</li>
 				</ul>
 				<!-- Hidden if no completed items are left ↓ -->
 				<button class="clear-completed">Clear completed</button>
 			</footer>
 
-<?
+<?php
 require_once('template/footer.php');
 ?>

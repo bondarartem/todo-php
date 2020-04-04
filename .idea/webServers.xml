@@ -2,7 +2,7 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="0a817464-b21f-487a-8255-be14179c2df3" name="bondarartem" url="http://62.109.12.12">
+      <webServer id="0a817464-b21f-487a-8255-be14179c2df3" name="bondarartem" url="http://bondarartem.ru">
         <fileTransfer host="62.109.12.12" port="21" rootFolder="/www/bondarartem.ru">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
