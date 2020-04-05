@@ -64,7 +64,6 @@ if (isset($_POST["register"])) {
             <p class="submit"><input class="button" id="register" name="register" type="submit"
                                      value="Зарегистрироваться"></p>
             <p class="regtext">Уже зарегистрированы? <a href="login.php">Введите имя пользователя</a></p>
-            <p class="regtext"><a href="forgot.php">Забыли пароль?</a></p>
         </form>
     </div>
 </div>
