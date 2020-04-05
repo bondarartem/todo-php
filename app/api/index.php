@@ -9,7 +9,6 @@ try {
             $api = new Task();
             if (in_array($path[4], array("all", "active", "completed", "get_count"))) {
                 $res = $api->show($path[4]);
-
                 echo json_encode($res, JSON_UNESCAPED_UNICODE);
             } elseif (in_array($path[4], array("complete", "uncomplete"))) {
                 $task_id = $_POST['task_id'];

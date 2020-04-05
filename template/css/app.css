@@ -1,8 +1,5 @@
-/*
-
-app-template.css overrides
-
-remove this comment if used
-remove this file if not
-
-*/
+.logout {
+    width: 100%;
+    text-align: right;
+    margin-top: 15px;
+}

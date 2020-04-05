@@ -3,7 +3,7 @@
 
 class CDB
 {
-    private $db;
+    public $db;
     private $db_host = '127.0.0.1';
     private $db_name = 'todo';
     private $db_user = 'todo';

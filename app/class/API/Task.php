@@ -41,21 +41,21 @@ class Task
         return $result;
     }
 
-    public function delete($action, $task_id = 0, $author_id = 1)
+    public function delete($action, $task_id = 0)
     {
         switch ($action) {
             case "delete":
                 $result = $this->deleteById($task_id);
                 break;
             case "delete_active":
-                $result = $this->deleteActive($author_id);
+                $result = $this->deleteActive();
                 break;
         }
 
         return $result;
     }
 
-    public function insert($text, $action, $author_id = 0)
+    public function insert($text, $action)
     {
         switch ($action) {
             case "create":
@@ -110,11 +110,11 @@ class Task
         return $task->completeTask($id, "0");
     }
 
-    private function createTask($text, $author_id = 0)
+    private function createTask($text)
     {
         $task = new CTask();
 
-        return $task->createTask($text, $author_id);
+        return $task->createTask($text);
     }
 
 
@@ -125,16 +125,16 @@ class Task
         return $task->deleteTask($id);
     }
 
-    private function deleteActive($author_id = 1)
+    private function deleteActive()
     {
         $task = new CTask();
 
-        return $task->deleteActive($author_id);
+        return $task->deleteActive();
     }
 
-    private function editTask($task_id, $text, $author_id = 1) {
+    private function editTask($task_id, $text) {
         $task = new CTask();
 
-        return $task->editTask($task_id, $text, $author_id);
+        return $task->editTask($task_id, $text);
     }
 }

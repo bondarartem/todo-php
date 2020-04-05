@@ -10,4 +10,6 @@
     <link rel="stylesheet" href="template/css/app.css">
 </head>
 <body>
+<div class="logout"><a href="auth/logout.php">Logout (<?=$_SESSION['session_username']?>)</a></div>
+
 <section class="todoapp">

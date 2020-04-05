@@ -61,11 +61,13 @@
 	$('.new-todo').keypress(function(e) {
 		if(e.which == 13) {
 			createTask($(this).val());
+			$(this).val("");
 			showTasks(status[1]);
 		}
 	});
 
 	$('.todo-list').on("click", "label", function () {
+		$('li .edit').hide();
 		let li = $(this).parent().parent();
 
 		if (li.find('.edit:visible').length)
@@ -185,7 +187,7 @@ function getActiveCount() {
 		success: function(response)
 		{
 			let result = (JSON.parse(response));
-			$('.todo-count').html("<strong>" + result[0][0] + "</strong> item left")
+			$('.todo-count').html("<strong>" + result[0][0] + "</strong> дел осталось")
 		}
 	});
 }
