@@ -81,6 +81,22 @@ class CTask
             throw new Exception('id incorrect', 500);
     }
 
+    public function completeAll($complete = false) {
+        $db = new CDB();
+
+        if ($complete)
+            $res = 1;
+        else
+            $res = 0;
+        if (!empty($this->author_id) && $this->author_id > 0) {
+            if ($res = $db->updateWithWhere("is_done", $res, "author_id = $this->author_id", "task"))
+                return $res;
+            else
+                throw new Exception('error', 500);
+        }else
+            throw new Exception('author_id incorrect', 500);
+    }
+
     public function completeTask($id, $status = "1") {
         $db = new CDB();
 

@@ -47,8 +47,6 @@
 				$(this).parent().parent().remove();
 			}
 		}
-		getActiveCount();
-
 	});
 
 	$('.clear-completed').on("click", function () {
@@ -85,6 +83,22 @@
 		}
 	}));
 
+	$('.todo-list').on("click", "li .destroy",  function () {
+		let id = $(this).parent().parent().data('id');
+		deleteTask(id);
+		$(this).parent().parent().remove();
+
+	});
+
+	$('.toggle-all').on("click", function () {
+		let res = 1;
+		if ($('.toggle-all:checked').length)
+			completeAllTasks();
+		else
+			uncompleteAllTasks();
+
+		showTasks(status[1]);
+	});
 })(window);
 
 
@@ -137,6 +151,7 @@ function deleteTask(id) {
 		data: { task_id : parseInt(id) },
 		success: function(response)
 		{
+			getActiveCount();
 		}
 	});
 }
@@ -147,7 +162,7 @@ function deleteActive() {
 		url: 'app/api/task/delete_active',
 		success: function(response)
 		{
-			console.log(response)
+			getActiveCount();
 		}
 	});
 }
@@ -162,6 +177,8 @@ function completeTask(id) {
 			$('li[data-id = '+ id +']').addClass('completed');
 
 			$('li[data-id = '+ id +'] .toggle').prop( "checked", true );
+
+			getActiveCount();
 		}
 	});
 }
@@ -176,10 +193,40 @@ function uncompleteTask(id) {
 			$('li[data-id = '+ id +']').removeClass('completed');
 
 			$('li[data-id = '+ id +'] .toggle').prop( "checked", false );
+
+			getActiveCount();
 		}
 	});
 }
+function completeAllTasks() {
+	$.ajax({
+		type: "POST",
+		url: 'app/api/task/complete_all',
+		success: function(response)
+		{
+			$('li').addClass('completed');
 
+			$('li .toggle').prop( "checked", true );
+
+			getActiveCount();
+		}
+	});
+}
+function uncompleteAllTasks() {
+	console.log(123);
+	$.ajax({
+		type: "POST",
+		url: 'app/api/task/uncomplete_all',
+		success: function(response)
+		{
+			$('li').removeClass('completed');
+
+			$('li .toggle').prop( "checked", false );
+
+			getActiveCount();
+		}
+	});
+}
 function getActiveCount() {
 	$.ajax({
 		type: "GET",

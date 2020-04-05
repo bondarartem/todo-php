@@ -36,6 +36,11 @@ class Task
             case "edit":
                 $result = $this->editTask($id, $text);
                 break;
+            case "complete_all":
+                $result = $this->completeAll();
+                break;
+            case "uncomplete_all":
+                $result = $this->uncompleteAll();
         }
 
         return $result;
@@ -95,6 +100,17 @@ class Task
         return $task->getCountLeftTasks();
     }
 
+    private function completeAll() {
+        $task = new CTask();
+
+        return $task->completeAll(true);
+    }
+
+    private function uncompleteAll() {
+        $task = new CTask();
+
+        return $task->completeAll(false);
+    }
 
     private function completeStatus($id)
     {

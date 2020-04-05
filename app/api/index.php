@@ -19,7 +19,10 @@ try {
                     throw new Exception("id incorrect", 500);
 
                 echo $res;
-            } elseif (in_array($path[4], array("create", "edit"))) {
+            } elseif (in_array($path[4], array("complete_all", "uncomplete_all"))) {
+                $res = $api->update(0, $path[4]);
+                echo $res;
+            }elseif (in_array($path[4], array("create", "edit"))) {
                 $task_id = $_POST['task_id'];
                 $text = $_POST['text'];
 
@@ -34,7 +37,7 @@ try {
                 $task_id = $_POST['task_id'];
 
                 if ($task_id && $task_id > 0 && $path[4] == "delete")
-                    $res = $api->delete($task_id, $path[4]);
+                    $res = $api->delete($path[4], $task_id);
                 elseif ($path[4] == 'delete_active')
                     $res = $api->delete($path[4]);
 
