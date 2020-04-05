@@ -33,6 +33,18 @@ class CDB
         return !empty($arResult) ? $arResult : false;
     }
 
+    function insert($sTable,$sFields, $sValues) {
+        $sql = "INSERT INTO $sTable ($sFields)
+                VALUES ($sValues)";
+
+        $result = $this->db->query($sql) or die("error");
+
+        if ($result)
+            return true;
+        else
+            return false;
+    }
+
     // delete by id
     function delete($id){
         $sql = "DELETE FROM $this->db_name WHERE id = $id";
@@ -44,8 +56,8 @@ class CDB
     }
 
     // update by id
-    function update($id, $field, $value) {
-        $sql = "UPDATE $this->db_name
+    function update($id, $field, $value, $table_name) {
+        $sql = "UPDATE $table_name
                 SET $field = $value
                 WHERE id = $id";
 
@@ -56,4 +68,20 @@ class CDB
         else
             return false;
     }
+
+    // update with where
+    function updateWithWhere($field, $value, $where, $table_name) {
+        $sql = "UPDATE $table_name
+                SET $field = $value
+                WHERE $where";
+
+        $result = $this->db->query($sql) or die("error");
+
+        if ($result)
+            return true;
+        else
+            return false;
+    }
+
+    // create
 }

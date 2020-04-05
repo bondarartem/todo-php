@@ -21,39 +21,85 @@ class CTask
 
         $arResults = $db->select("task", $sFields, $sWhere);
 
-        return !empty($arResults) ? $arResults : false;
+        if (!empty($arResults))
+            return $arResults;
+        else
+            return "0";
     }
 
-    public function deleteTask($id) {
+    // метод возвращает кол-во незавершенных задач
+    public function getCountLeftTasks($author_id = 1) {
+        $db = new CDB();
+
+        $sFields = "COUNT(*)";
+
+        $sWhere = "author_id = $author_id AND is_done = 0";
+
+        $arResults = $db->select("task", $sFields, $sWhere);
+
+        if (!empty($arResults))
+            return $arResults;
+        else
+            return "0";
+    }
+
+    public function deleteTask($id, $author_id = 0) {
         $db = new CDB();
 
         if (!empty($id) && $id > 0) {
             if ($db->update($id,"is_active", "0"))
                 return true;
             else
-                return false;
-        }
+                throw new Exception('error', 500);
+        }else
+            throw new Exception('id incorrect', 500);
     }
 
-    public function completeTask($id) {
+    public function deleteActive($author_id = 1) {
+        $db = new CDB();
+        if (!empty($author_id) && $author_id > 0) {
+            if ($res = $db->updateWithWhere("is_active", 0, "author_id = $author_id AND is_done = 1", "task"))
+                return $res;
+            else
+                throw new Exception('error', 500);
+        }else
+            throw new Exception('id incorrect', 500);
+    }
+
+    public function completeTask($id, $status = "1") {
         $db = new CDB();
 
         if (!empty($id) && $id > 0) {
-            if ($db->update($id,"is_done", "1"))
+            if ($db->update($id,"is_done", $status, "task"))
                 return true;
             else
-                return false;
-        }
+                throw new Exception('error', 500);
+        }else
+            throw new Exception('id incorrect', 500);
     }
 
-    public function editTask($id, $text) {
+    public function createTask($text, $author_id = 1) {
+        $db = new CDB();
+
+        if (empty($text))
+            $text = "";
+
+        if ($db->insert("task","text, author_id","'$text', $author_id"))
+            return true;
+        else
+            throw new Exception('error', 500);
+    }
+
+    public function editTask($id, $text, $author_id = 1) {
         $db = new CDB();
 
         if (!empty($id) && $id > 0) {
-            if ($db->update($id,"text", $text))
+            if ($db->update($id,"text", $text,"task"))
                 return true;
             else
-                return false;
-        }
+                throw new Exception('error', 500);
+        } else
+            throw new Exception('id incorrect', 500);
+
     }
 }
