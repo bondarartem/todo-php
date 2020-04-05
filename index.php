@@ -8,7 +8,6 @@ if(!isset($_SESSION["session_username"]) || !isset($_SESSION["session_id"])){
 }
 
 require_once('template/header.php');
-require_once('controllers/TodoController.php');
 
 
 ?>
