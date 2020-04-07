@@ -18,7 +18,7 @@ try {
                 else
                     throw new Exception("id incorrect", 500);
 
-                echo $res;
+                echo json_encode($res, JSON_UNESCAPED_UNICODE);;
             } elseif (in_array($path[4], array("complete_all", "uncomplete_all"))) {
                 $res = $api->update(0, $path[4]);
                 echo $res;
@@ -33,6 +33,8 @@ try {
                         $res = $api->insert($text, $path[4]);
                 else
                     throw new Exception("text empty", 500);
+
+                echo json_encode($res, JSON_UNESCAPED_UNICODE);
             } elseif (in_array($path[4], array("delete", "delete_active"))) {
                 $task_id = $_POST['task_id'];
 
@@ -41,7 +43,7 @@ try {
                 elseif ($path[4] == 'delete_active')
                     $res = $api->delete($path[4]);
 
-                echo $res;
+                echo json_encode($res, JSON_UNESCAPED_UNICODE);;
             }
         }
     }

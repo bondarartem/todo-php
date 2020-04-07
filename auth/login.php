@@ -43,6 +43,7 @@ if(isset($_POST["login"])){
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,6 +54,10 @@ if(isset($_POST["login"])){
 <body>
 <div class="container mlogin">
     <div id="login">
+        <?php
+        if ($_GET['register']=='ok'){?>
+            <p style="color: green">Вы успешно зарегистрированы</p>
+        <?php }?>
         <h1>Вход</h1>
         <form action="" id="loginform" method="post"name="loginform">
             <p><label for="user_login">Имя пользователя<br>

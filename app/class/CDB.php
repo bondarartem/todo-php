@@ -10,14 +10,16 @@ class CDB
     private $db_password = 'todo';
 
     // Инициализируем подключение к бд
-    function __construct(){
+    function __construct()
+    {
         $this->db = new mysqli($this->db_host, $this->db_user, $this->db_password, $this->db_name);
 
-        mysqli_query($this->db,'SET NAMES utf8');
+        mysqli_query($this->db, 'SET NAMES utf8');
     }
 
     // simple select with fetch
-    function select($sTable, $sFields, $sWhere) {
+    function select($sTable, $sFields, $sWhere)
+    {
         $arResult = array();
 
         $sql = "SELECT $sFields
@@ -30,33 +32,40 @@ class CDB
             $arResult[] = $row;
         }
 
-        return !empty($arResult) ? $arResult : false;
+        if (!empty($arResult))
+            return $arResult;
+        else
+            throw new Exception('db select error', 500);
     }
 
-    function insert($sTable,$sFields, $sValues) {
+    function insert($sTable, $sFields, $sValues)
+    {
         $sql = "INSERT INTO $sTable ($sFields)
                 VALUES ($sValues)";
 
         $result = $this->db->query($sql) or die("error");
 
         if ($result)
-            return true;
+            return $this->db->insert_id;
         else
-            return false;
+            throw new Exception('db insert error', 500);
     }
 
     // delete by id
-    function delete($id){
+    function delete($id)
+    {
         $sql = "DELETE FROM $this->db_name WHERE id = $id";
         $result = $this->db->query($sql) or die("error");
 
-        if ($result) {
+        if ($result)
             return true;
-        }
+        else
+            throw new Exception('db delete error', 500);
     }
 
     // update by id
-    function update($id, $field, $value, $table_name) {
+    function update($id, $field, $value, $table_name)
+    {
         $sql = "UPDATE $table_name
                 SET $field = $value
                 WHERE id = $id";
@@ -66,11 +75,12 @@ class CDB
         if ($result)
             return true;
         else
-            return false;
+            throw new Exception('db update error', 500);
     }
 
     // update with where
-    function updateWithWhere($field, $value, $where, $table_name) {
+    function updateWithWhere($field, $value, $where, $table_name)
+    {
         $sql = "UPDATE $table_name
                 SET $field = $value
                 WHERE $where";
@@ -80,8 +90,6 @@ class CDB
         if ($result)
             return true;
         else
-            return false;
+            throw new Exception('db update[where] error', 500);
     }
-
-    // create
 }

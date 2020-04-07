@@ -16,7 +16,7 @@ require_once('template/header.php');
 </script>
 			<header class="header">
 				<h1>todos</h1>
-				<input class="new-todo" placeholder="очередной пунктик" autofocus>
+				<input class="new-todo" placeholder="очередной пунктик" maxlength="250" autofocus>
 			</header>
 			<!-- This section should be hidden by default and shown when there are todos -->
 			<section class="main">
@@ -33,13 +33,13 @@ require_once('template/header.php');
 				<!-- Remove this if you don't implement routing -->
 				<ul class="filters">
 					<li>
-						<a id="all" class="selected" href="#/">All</a>
+						<a id="all" class="selected groups" href="#/">All</a>
 					</li>
 					<li>
-						<a id="active" href="#/active">Active</a>
+						<a id="active" class="groups" href="#/active">Active</a>
 					</li>
 					<li>
-						<a id="completed" href="#/completed">Completed</a>
+						<a id="completed" class="groups" href="#/completed">Completed</a>
 					</li>
 				</ul>
 				<!-- Hidden if no completed items are left ↓ -->

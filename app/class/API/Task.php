@@ -3,6 +3,12 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/app/class/CTask.php");
 
 class Task
 {
+    private $task;
+
+    public function __construct()
+    {
+        $this->task = new CTask();
+    }
 
     public function show($action)
     {
@@ -24,7 +30,7 @@ class Task
         return $result;
     }
 
-    public function update($id, $action, $text="")
+    public function update($id, $action, $text = "")
     {
         switch ($action) {
             case "complete":
@@ -73,84 +79,67 @@ class Task
 
     private function showAll()
     {
-        $task = new CTask();
-
-        return $task->getTasks();
-
+        return $this->task->getTasks();
     }
 
     private function showActive()
     {
-        $task = new CTask();
-
-        return $task->getTasks(1);
+        return $this->task->getTasks(1);
     }
 
     private function showCompleted()
     {
-        $task = new CTask();
-
-        return $task->getTasks(2);
+        return $this->task->getTasks(2);
     }
 
     private function getCount()
     {
-        $task = new CTask();
-
-        return $task->getCountLeftTasks();
+        return $this->task->getCountLeftTasks();
     }
 
-    private function completeAll() {
-        $task = new CTask();
-
-        return $task->completeAll(true);
+    private function completeAll()
+    {
+        return $this->task->completeAll(true);
     }
 
-    private function uncompleteAll() {
-        $task = new CTask();
-
-        return $task->completeAll(false);
+    private function uncompleteAll()
+    {
+        return $this->task->completeAll(false);
     }
 
     private function completeStatus($id)
     {
-        $task = new CTask();
-
-        return $task->completeTask($id);
+        $this->task->completeTask($id);
+        return $this->task->getDetail($id);
     }
 
     private function uncompleteStatus($id)
     {
-        $task = new CTask();
-
-        return $task->completeTask($id, "0");
+        $this->task->completeTask($id, "0");
+        return $this->task->getDetail($id);
     }
 
     private function createTask($text)
     {
-        $task = new CTask();
-
-        return $task->createTask($text);
+        $id = $this->task->createTask($text);
+        return $this->task->getDetail($id);
     }
 
 
     private function deleteById($id)
     {
-        $task = new CTask();
-
-        return $task->deleteTask($id);
+        $this->task->deleteTask($id);
+        return $this->task->getDetail($id);
     }
 
     private function deleteActive()
     {
-        $task = new CTask();
-
-        return $task->deleteActive();
+        return $this->task->deleteActive();
     }
 
-    private function editTask($task_id, $text) {
-        $task = new CTask();
-
-        return $task->editTask($task_id, $text);
+    private function editTask($task_id, $text)
+    {
+        $this->task->editTask($task_id, $text);
+        return $this->task->getDetail($task_id);
     }
 }

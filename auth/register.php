@@ -20,12 +20,12 @@ if (isset($_POST["register"])) {
         $query = $db->db->query("SELECT * FROM user WHERE username='" . $username . "'");
         $numrows = mysqli_num_rows($query);
         if ($numrows == 0) {
-            $sql = "INSERT INTO user
+            $sql = "INSERT INTO todo.user
   (email, username, password_hash)
 	VALUES('$email', '$username', '$password')";
             $result = $db->db->query($sql);
             if ($result) {
-                $message = "Вы успешно зарегестрированы";
+                header('Location: /auth/login.php?register=ok');
             } else {
                 $message = "Произошла ошибка при регистрации!";
             }
@@ -39,7 +39,7 @@ if (isset($_POST["register"])) {
 ?>
 
 <?php if (!empty($message)) {
-    echo "<p class='error'>" . $message . "</p>";} ?>
+    echo "<p style='color: #dd1d24'>" . $message . "</p>";} ?>
 
 
 <!DOCTYPE html>
