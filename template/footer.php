@@ -7,6 +7,6 @@
 <!-- Scripts here. Don't remove ↓ -->
 <script src="template/js/jquery-3.4.1.min.js"></script>
 <script src="node_modules/todomvc-common/base.js"></script>
-<script src="template/js/app.js"></script>
+<script src="template/js/app.js?v1.04"></script>
 </body>
 </html>

@@ -3,27 +3,28 @@ let leftTasks = 0;
 /*
 TODO:
 1. зашифровать js, чтобы не было видно в браузере
+2. editTask - исправить
  */
 (function (window) {
     'use strict';
 
     let path = window.location.href;
-    let status = path.split("/#/");
-    if (!status[1]) {
-        status[1] = 'all';
+    let state = path.split("/#/");
+    if (!state[1]) {
+        state[1] = 'all';
     }
 
     window.onload = function () {
         $(".filters li a").removeClass('selected');
-        $(`#${status[1]}`).addClass('selected');
+        $(`#${state[1]}`).addClass('selected');
 
-        showTasks(status[1]);
+        showTasks(state[1]);
         getActiveCount();
     };
 
     $('.groups').on("click", function () {
-        status[1] = $(this).attr('id');
-        showTasks(status[1]);
+        state[1] = $(this).attr('id');
+        showTasks(state[1]);
     });
 
 
@@ -34,26 +35,25 @@ TODO:
         if (is_done) {
             uncompleteTask(id);
 
-            if (status[1] == 'completed') {
+            if (state[1] == 'completed') {
                 task.remove();
             }
         } else {
             completeTask(id);
 
-            if (status[1] == 'active') {
+            if (state[1] == 'active') {
                 task.remove();
             }
         }
     });
 
     $('.clear-completed').on("click", function () {
-        deleteActive();
-
+        deleteActive(state[1]);
     });
 
     // create new task on 'Enter' button
     $('.new-todo').keypress(function (e) {
-        if (e.which == 13) {
+        if (e.which === 13) {
             createTask($(this).val());
             $(this).val("");
         }
@@ -94,7 +94,7 @@ TODO:
         }
 
 
-        showTasks(status[1]);
+        showTasks(state[1]);
     });
 })(window);
 
@@ -165,17 +165,19 @@ function deleteTask(id) {
             let res = (JSON.parse(response)[0])
 
             if (res[2] === "0")
-                minusCompletedTask();
+                minusLeftTasks();
         }
     });
 }
 
-function deleteActive() {
+function deleteActive(state) {
     $.ajax({
         type: "POST",
         url: 'app/api/task/delete_active',
         success: function (response) {
-            showTasks(status[1]);
+            if (response){
+                showTasks(state);
+            }
         }
     });
 }
@@ -186,12 +188,11 @@ function completeTask(id) {
         url: 'app/api/task/complete',
         data: {task_id: parseInt(id)},
         success: function (response) {
-            console.log(response);
             $('li[data-id = ' + id + ']').addClass('completed');
 
             $('li[data-id = ' + id + '] .toggle').prop("checked", true);
 
-            plusCompletedTask();
+            minusLeftTasks();
         }
     });
 }
@@ -269,7 +270,7 @@ function createTask(text) {
                 el.after(content);
             }
 
-            minusCompletedTask();
+            plusLeftTasks();
         }
     });
 }
@@ -286,12 +287,12 @@ function editTask(id, text) {
 }
 
 
-function plusCompletedTask() {
+function minusLeftTasks() {
     leftTasks--;
     $('.todo-count strong').html(leftTasks);
 }
 
-function minusCompletedTask() {
+function plusLeftTasks() {
     leftTasks++;
     $('.todo-count strong').html(leftTasks);
 }
