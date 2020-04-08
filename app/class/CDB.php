@@ -6,8 +6,8 @@ class CDB
     public $db;
     private $db_host = '127.0.0.1';
     private $db_name = 'todo';
-    private $db_user = 'todo';
-    private $db_password = 'todo';
+    private $db_user = 'bondaraa';
+    private $db_password = '28384898tema';
 
     // Инициализируем подключение к бд
     function __construct()

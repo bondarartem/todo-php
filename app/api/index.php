@@ -7,43 +7,61 @@ try {
     if ($path[2] == 'api') {
         if ($path[3] == 'task') {
             $api = new Task();
-            if (in_array($path[4], array("all", "active", "completed", "get_count"))) {
-                $res = $api->show($path[4]);
-                echo json_encode($res, JSON_UNESCAPED_UNICODE);
-            } elseif (in_array($path[4], array("complete", "uncomplete"))) {
-                $task_id = $_POST['task_id'];
+            $action = $path[4];
 
-                if ($task_id && $task_id > 0)
-                    $res = $api->update($task_id, $path[4]);
-                else
-                    throw new Exception("id incorrect", 500);
-
-                echo json_encode($res, JSON_UNESCAPED_UNICODE);;
-            } elseif (in_array($path[4], array("complete_all", "uncomplete_all"))) {
-                $res = $api->update(0, $path[4]);
-                echo $res;
-            }elseif (in_array($path[4], array("create", "edit"))) {
-                $task_id = $_POST['task_id'];
-                $text = $_POST['text'];
-
-                if (!empty($text))
-                    if (!empty($task_id) && $task_id > 0)
-                        $res = $api->update($task_id, $path[4], "'$text'");
+            switch ($action) {
+                case "all":
+                case "active":
+                case "completed":
+                case "get_count":
+                    $res = $api->show($action);
+                    echo json_encode($res, JSON_UNESCAPED_UNICODE);
+                    break;
+                case "complete":
+                case "uncomplete":
+                    $task_id = $_POST['task_id'];
+                    if ($task_id && $task_id > 0)
+                        $res = $api->update($task_id, $action);
                     else
-                        $res = $api->insert($text, $path[4]);
-                else
-                    throw new Exception("text empty", 500);
+                        throw new Exception("id incorrect", 500);
+                    echo json_encode($res, JSON_UNESCAPED_UNICODE);;
+                break;
+                case "complete_all":
+                case "uncomplete_all":
+                    $res = $api->update(0, $action);
+                    echo $res;
+                break;
+                case "create":
+                case "edit":
+                    $task_id = $_POST['task_id'];
+                    $text = $_POST['text'];
+                    if (!empty($text)) {
+                        if (preg_match("/'\"\\/{}<>,*&#~@/", $text))
+                            throw new Exception("Text contains forbidden symbols");
 
-                echo json_encode($res, JSON_UNESCAPED_UNICODE);
-            } elseif (in_array($path[4], array("delete", "delete_active"))) {
-                $task_id = $_POST['task_id'];
+                        if (!empty($task_id) && $task_id > 0)
+                            $res = $api->update($task_id, $action, "'$text'");
+                        else
+                            $res = $api->insert($text, $action);
+                    }
+                    else
+                        throw new Exception("text empty", 500);
 
-                if ($task_id && $task_id > 0 && $path[4] == "delete")
-                    $res = $api->delete($path[4], $task_id);
-                elseif ($path[4] == 'delete_active')
-                    $res = $api->delete($path[4]);
+                    echo json_encode($res, JSON_UNESCAPED_UNICODE);
+                break;
+                case "delete":
+                case "delete_active":
+                    $task_id = $_POST['task_id'];
 
-                echo json_encode($res, JSON_UNESCAPED_UNICODE);;
+                    if ($task_id && $task_id > 0 && $action == "delete")
+                        $res = $api->delete($action, $task_id);
+                    elseif ($action == 'delete_active')
+                        $res = $api->delete($action);
+
+                    echo json_encode($res, JSON_UNESCAPED_UNICODE);
+                break;
+                default:
+                    throw new Exception("Invalid API method (Task)", 500);
             }
         }
     }
