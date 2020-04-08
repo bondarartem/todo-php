@@ -3,7 +3,7 @@ let leftTasks = 0;
 /*
 TODO:
 1. зашифровать js, чтобы не было видно в браузере
-2. editTask - исправить
+2. добавить sharelink
  */
 (function (window) {
     'use strict';
@@ -254,6 +254,9 @@ function getActiveCount() {
 }
 
 function createTask(text) {
+    if (text.match(/[!@#$%^&*()_+=\[\]{};':"\\|,.<>\/?]/)){
+        return false;
+    }
     $.ajax({
         type: "POST",
         url: 'app/api/task/create',
@@ -281,7 +284,12 @@ function editTask(id, text) {
         url: 'app/api/task/edit',
         data: {text: text, task_id: id},
         success: function (response) {
-            console.log(id, response);
+            let task = $('li[data-id = ' + id + ']');
+            let res = JSON.parse(response)[0];
+            task.after(getTaskHtml(res[0],res[1], "class='completed'", 'checked'));
+
+            task.remove();
+
         }
     });
 }

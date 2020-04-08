@@ -6,35 +6,29 @@ if(isset($_SESSION["session_username"]) && isset($_SESSION["session_id"])){
     header("Location: /");
 }
 
-require_once($_SERVER['DOCUMENT_ROOT'] . '/app/class/CDB.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/template/header.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/app/class/CUser.php');
 
 $db = new CDB();
 
 
 if (isset($_POST["register"])) {
 
-    if (!empty($_POST['email']) && !empty($_POST['username']) && !empty($_POST['password'])) {
+    try {
         $email = htmlspecialchars($_POST['email']);
         $username = htmlspecialchars($_POST['username']);
         $password = md5(htmlspecialchars($_POST['password']));
-        $query = $db->db->query("SELECT * FROM user WHERE username='" . $username . "'");
-        $numrows = mysqli_num_rows($query);
-        if ($numrows == 0) {
-            $sql = "INSERT INTO todo.user
-  (email, username, password_hash)
-	VALUES('$email', '$username', '$password')";
-            $result = $db->db->query($sql);
-            if ($result) {
-                header('Location: /auth/login.php?register=ok');
-            } else {
-                $message = "Произошла ошибка при регистрации!";
-            }
+
+        $user = new CUser();
+        if (!empty($email) && !empty($username) && !empty($password)) {
+            $user->register($email, $username, $password);
         } else {
-            $message = "Этот пользователь уже занят, введите другой логин!";
+            $message = "Все поля обязательны к заполнению";
         }
-    } else {
-        $message = "Все поля обязательны к заполнению";
+    } catch (Exception $e) {
+        echo 'Caught exception: ', $e->getMessage(), "\n";
     }
+
 }
 ?>
 

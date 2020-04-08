@@ -36,9 +36,6 @@ try {
                     $task_id = $_POST['task_id'];
                     $text = $_POST['text'];
                     if (!empty($text)) {
-                        if (preg_match("/'\"\\/{}<>,*&#~@/", $text))
-                            throw new Exception("Text contains forbidden symbols");
-
                         if (!empty($task_id) && $task_id > 0)
                             $res = $api->update($task_id, $action, "'$text'");
                         else

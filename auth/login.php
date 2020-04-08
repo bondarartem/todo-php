@@ -1,9 +1,8 @@
 <?php
 session_start();
 
-require_once($_SERVER['DOCUMENT_ROOT'] . '/app/class/CDB.php');
-$db = new CDB();
-
+require_once($_SERVER['DOCUMENT_ROOT'] . '/template/header.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/app/class/CUser.php');
 
 if(isset($_SESSION["session_username"]) && isset($_SESSION["session_id"])){
     // вывод "Session is set"; // в целях проверки
@@ -12,35 +11,22 @@ if(isset($_SESSION["session_username"]) && isset($_SESSION["session_id"])){
 
 
 if(isset($_POST["login"])){
+    try {
 
-    if(!empty($_POST['username']) && !empty($_POST['password'])) {
-        $username=htmlspecialchars($_POST['username']);
-        $password=md5(htmlspecialchars($_POST['password']));
-        $query = $db->db->query("SELECT * FROM user WHERE username='".$username."' AND password_hash='".$password."'");
-        $numrows=mysqli_num_rows($query);
-        if($numrows!=0)
-        {
-            while($row=mysqli_fetch_assoc($query))
-            {
-                $dbUsername=$row['username'];
-                $dbPassword=$row['password_hash'];
-                $dbId = $row['id'];
-            }
-            if($username == $dbUsername && $password == $dbPassword)
-            {
-                // старое место расположения
-                //  session_start();
-                $_SESSION['session_username']=$username;
-                $_SESSION['session_id']=$dbId;
-                /* Перенаправление браузера */
-                header("Location: /");
-            }
+        $user = new CUser();
+
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+
+        if(!empty($username) && !empty($password)) {
+            $user->login($username,md5($password));
         } else {
-            $message =  "Неправильная пара логин/пароль";
+            throw new Exception("Все поля должны быть заполнены!");
         }
-    } else {
-        $message = "Все поля должны быть заполнены!";
+    } catch (Exception $e) {
+        echo 'Caught exception: ', $e->getMessage(), "\n";
     }
+
 }
 ?>
 
@@ -52,7 +38,6 @@ if(isset($_POST["login"])){
     <link href= 'http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 </head>
 <body>
-<div class="container mlogin">
     <div id="login">
         <?php
         if ($_GET['register']=='ok'){?>
@@ -70,6 +55,5 @@ if(isset($_POST["login"])){
             <p class="regtext">Еще не зарегистрированы? <a href= "register.php">Регистрация</a></p>
         </form>
     </div>
-</div>
 </body>
 </html>
