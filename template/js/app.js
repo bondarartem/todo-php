@@ -54,7 +54,11 @@ TODO:
     // create new task on 'Enter' button
     $('.new-todo').keypress(function (e) {
         if (e.which === 13) {
-            createTask($(this).val());
+            if ($(this).val().match(/[!@#$%^&*()_+=\[\]{};':"\\|,.<>\/?]/)){
+                $(this).val($(this).parent().find('label').text());
+                alert("Текст содержит недопустимые символы");
+            } else
+                createTask($(this).val());
             $(this).val("");
         }
     });
@@ -72,7 +76,11 @@ TODO:
     $('.todo-list').on('keypress focusout mouseup', '.edit', (function (e) {
         if (e.which === 13 || e.type === 'focusout' ) {
             let id = $(this).parent().data('id');
-            editTask(id, $(this).val());
+            if ($(this).val().match(/[!@#$%^&*()_+=\[\]{};':"\\|,.<>\/?]/)){
+                $(this).val($(this).parent().find('label').text());
+                alert("Текст содержит недопустимые символы");
+            } else
+                editTask(id, $(this).val());
         }
     }));
 
@@ -255,6 +263,7 @@ function getActiveCount() {
 
 function createTask(text) {
     if (text.match(/[!@#$%^&*()_+=\[\]{};':"\\|,.<>\/?]/)){
+        alert("Text contains forbidden symbols");
         return false;
     }
     $.ajax({
@@ -286,10 +295,16 @@ function editTask(id, text) {
         success: function (response) {
             let task = $('li[data-id = ' + id + ']');
             let res = JSON.parse(response)[0];
-            task.after(getTaskHtml(res[0],res[1], "class='completed'", 'checked'));
+
+            let classDone = "";
+            let checked = "";
+            if (res[2] == 1){
+                classDone = "class='completed'";
+                checked = 'checked';
+            }
+            task.after(getTaskHtml(res[0],res[1], classDone, checked));
 
             task.remove();
-
         }
     });
 }
